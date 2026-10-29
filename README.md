@@ -29,9 +29,9 @@ KKCharaStudioVRPlugin_0.0.3的BUG
 - 修复ME窗口一拖动就瞬移到屏幕中央问题，ME下拉菜单看不到和ME悬浮说明框错位问题，UILib.MovableWindow 用真实鼠标坐标当世界坐标，VR 下必然错位。
 
 ## 未修复的
-KKCharaStudioVRPlugin_0.0.3就有的部分地图里的镜子问题，考虑到浪费性能降低游戏帧数没有修复。
-KKCharaStudioVRPlugin_0.0.3原版的VR第一人称功能，先按ctrl+B，再ctrl+C，ctrl+shift+X的第一人称功能，已被我魔改开发出的KK_PerspectiveX插件里面的VR第一人称功能完美替代，且功能更完善更强大体验更自由更好，所以不修复这部分，请不要按CTRL+B进入那个模式，会触发指针BUG，只能重启游戏。
-KK_PerspectiveX地址
+- KKCharaStudioVRPlugin_0.0.3就有的部分地图里的镜子问题，考虑到浪费性能降低游戏帧数没有修复。
+- KKCharaStudioVRPlugin_0.0.3原版的VR第一人称功能，先按ctrl+B，再ctrl+C，ctrl+shift+X的第一人称功能，已被我魔改开发出的KK_PerspectiveX插件里面的VR第一人称功能完美替代，且功能更完善更强大体验更自由更好，所以不修复这部分，请不要按CTRL+B进入那个模式，会触发指针BUG，只能重启游戏。
+- KK_PerspectiveX地址
 
 ## 许可
 MIT，见 LICENSE。
