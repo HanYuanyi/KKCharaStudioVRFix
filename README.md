@@ -34,7 +34,8 @@ KKCharaStudioVRPlugin_0.0.3的BUG
 - KK_PerspectiveX地址https://github.com/HanYuanyi/KK_PerspectiveX
 
 ## 兼容
-和Ermin那边的Timeline 镜头进行了 VR 视角补正插件兼容https://github.com/YukyoMoe/KK_VR_CameraSync，你可以选择用我的这个KKCharaStudioVRFix+KK_VR_CameraSync，也可以继续使用KK_VR0.4.0+KK_VR_CameraSync。
+和Ermin那边的Timeline 镜头进行了 VR 视角补正插件兼容https://github.com/YukyoMoe/KK_VR_CameraSync
+你可以选择用我的这个KKCharaStudioVRFix+KK_VR_CameraSync，也可以继续使用KK_VR0.4.0+KK_VR_CameraSync。
 本插件和Ermin开发的KK_VR0.4.0兼容性未知，因为KK_VR0.4.0是通过手腕菜单功能绕过了上面的这些BUG，但绕的什么情况我没测试过，不过本插件需要有KCharaStudioVRPlugin0.0.3，大概率无法一起使用。
 
 ## 许可
