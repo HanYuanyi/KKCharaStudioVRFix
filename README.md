@@ -1,6 +1,6 @@
 # KKCharaStudioVRFix
 
-KKCharaStudioVRPlugin_0.0.3的修复插件，不替代原版，而是在原版 KKCharaStudioVRPlugin 0.0.3 之上修掉一堆BUG和添加新功能
+KKCharaStudioVRPlugin_0.0.3的修复插件，不替代原版，在原版基础上修掉一堆BUG和添加新功能
 
 ## 前置依赖
 
