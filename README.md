@@ -35,7 +35,7 @@ KKCharaStudioVRPlugin_0.0.3的BUG
 
 ## 兼容
 和Ermin那边的"Timeline 镜头进行了 VR 视角补正"插件https://github.com/YukyoMoe/KK_VR_CameraSync 兼容，你可以选择用我的这个插件KKCharaStudioVRFix+KK_VR_CameraSync，也可以继续使用KK_VR0.4.0+KK_VR_CameraSync。
-本插件和Ermin开发的KK_VR0.4.0兼容性未知，因为KK_VR0.4.0是通过手腕菜单功能绕过了上面的这些BUG，但绕的什么情况我没测试过，不过本插件需要有KCharaStudioVRPlugin0.0.3，大概率无法一起使用。
+本插件和Ermin开发的KK_VR0.4.0兼容性未知，因为KK_VR0.4.0是通过手腕菜单功能绕过了上面的这些BUG，但绕的什么情况我没测试过，不过本插件需要有KKCharaStudioVRPlugin0.0.3，大概率无法一起使用。
 
 ## 许可
 MIT，见 LICENSE。
@@ -43,3 +43,51 @@ MIT，见 LICENSE。
 以下是英文翻译
 ----------------------------------------------------------------------------------------------------------------------------------------------------------
 
+# KKCharaStudioVRFix
+
+A standalone fix plugin for KKCharaStudioVRPlugin 0.0.3 — it fixes a pile of bugs in the original and adds a few things it should have had in the first place.
+
+## Requirements
+
+| Dependency | Version |
+|---|---|
+| Koikatu / Koikatsu Party (with CharaStudio) | base game |
+| BepInEx | 5.4.x (64-bit) |
+| KKCharaStudioVRPlugin | 0.0.3 (this plugin fixes its bugs) |
+
+## Install
+
+1. Install BepInEx 5.4 and the original KKCharaStudioVRPlugin 0.0.3
+2. Drop KKCharaStudioVRFix.dll into BepInEx/plugins/
+3. Start VR the same way you always do
+
+## What it fixes
+
+Bugs that came with KKCharaStudioVRPlugin 0.0.3:
+
+- Load a scene card a second time, or switch maps a few times, and the camera ends up somewhere weird, the UI and controllers vanish, IK/FK points get stuck on permanently, and the screen goes grey (the filter ends up as "none" — the morning/dusk/night one). The only way out was restarting the game. It won't trigger anymore. How it's fixed: the game keeps shoving the VR rig into the map scene, and when that scene unloads the rig gets dragged out with it, which kills the Mode. Switched it to event-driven (VRCamera.OnAwake plus the four scene-unload API prefixes) so DontDestroyOnLoad is applied before the unload happens.
+- If the controllers are started before the game, you'd end up with just the ring visible and no pointer control — or the pointer would work but snap to the top-left corner the moment you pull the trigger. Now it doesn't matter whether the controllers start first or last. How it's fixed: SteamVR_RenderModel.UpdateModel only rebuilds the model when the name changes, and when the boot timing is off it fails silently and never retries.
+- Fixed the windows inside the gear-icon System tab being invisible — e.g. the image effects menu you could click but not see (blind clicking), plus every dropdown menu. They're always visible now.
+- Dragging the world is unlocked automatically once you're in game. Drag with the side button.
+
+## What it adds
+
+- Image effects can be changed in real time now. Before, you were stuck with whatever preset was saved at launch; now you can change it live and even load the effects saved inside a scene card. Why it needed fixing: the effects on the VR camera are snapshot copies, so changing texture-type parameters means destroying and rebuilding the component.
+- After loading a scene card, the camera returns to the exact rotation and position saved in that card. The 10 camera slots saved in it work too — click one and the VR camera goes to the right spot.
+- Fixed the ME window teleporting to the middle of the screen the moment you drag it, the ME dropdown menus being invisible, and the ME tooltip being out of place. (The original UILib.MovableWindow treats real mouse coordinates as world coordinates, which is guaranteed to be off in VR.)
+
+## Not fixed
+
+- The mirror issue in some maps was already there in 0.0.3. I left it alone because fixing it costs performance and drops your framerate.
+- The original 0.0.3 first-person mode (Ctrl+B, then Ctrl+C, then Ctrl+Shift+X) is not fixed. My own modded KK_PerspectiveX has a first-person mode that replaces it completely — better features, more freedom, just a nicer experience. So I'm not touching this one. Please don't press Ctrl+B to get into that mode; it triggers the pointer bug and you'll have to restart the game.
+- If you want first-person VR (and I'd strongly recommend it), grab my modded KK_PerspectiveX. Docs and download are on ZOD or GitHub: https://github.com/HanYuanyi/KK_PerspectiveX
+
+## Compatibility
+
+Works alongside Ermin's "Timeline camera VR correction" plugin https://github.com/YukyoMoe/KK_VR_CameraSync — you can either run my KKCharaStudioVRFix + KK_VR_CameraSync, or keep using KK_VR 0.4.0 + KK_VR_CameraSync.
+
+Compatibility with Ermin's KK_VR 0.4.0 is unknown. KK_VR 0.4.0 gets around these bugs through the wrist menu, but I never tested exactly how it does that. This plugin also needs KKCharaStudioVRPlugin 0.0.3, so most likely they can't run together.
+
+## License
+
+MIT, see LICENSE.
