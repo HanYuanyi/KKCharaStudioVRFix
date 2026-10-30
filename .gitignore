@@ -1,0 +1,12 @@
+# 编译产物
+bin/
+obj/
+*.user
+*.suo
+.vs/
+*.pdb
+*.cache
+
+# 本地备份
+_backup*/
+_deploy*/
