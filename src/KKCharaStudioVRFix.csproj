@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  KKCharaStudioVRFix —— KKCharaStudioVRPlugin 0.0.3 的修复插件
+
+  编译前把 GameDir 改成你自己的游戏根目录（CharaStudio.exe 所在目录）。
+  命令行示例：
+      dotnet build -c Release -p:GameDir="E:\Koikatu"
+  或用 Visual Studio 2022 打开后直接编译。
+
+  需要的引用全部来自你的游戏目录，不需要额外下载：
+      $(GameDir)\CharaStudio_Data\Managed\UnityEngine.dll
+      $(GameDir)\CharaStudio_Data\Managed\UnityEngine.UI.dll
+      $(GameDir)\CharaStudio_Data\Managed\Assembly-CSharp.dll
+      $(GameDir)\BepInEx\core\BepInEx.dll
+      $(GameDir)\BepInEx\core\0Harmony.dll
+      $(GameDir)\BepInEx\VRGIN_KKCS.dll          ← 0.0.3 自带的 VRGIN
+
+  net35 的目标框架包通过 NuGet 自动获取（Microsoft.NETFramework.ReferenceAssemblies.net35），
+  所以不需要在本机安装 .NET Framework 3.5 目标包。
+
+  产物：bin\Release\KKCharaStudioVRFix.dll  →  丢到 $(GameDir)\BepInEx\plugins\
+-->
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <GameDir Condition="'$(GameDir)' == ''">E:\Koikatu</GameDir>
+
+    <TargetFramework>net35</TargetFramework>
+    <AssemblyName>KKCharaStudioVRFix</AssemblyName>
+    <RootNamespace>KKCharaStudioVRFix</RootNamespace>
+    <Version>1.0.0</Version>
+    <LangVersion>7.3</LangVersion>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
+    <!-- Company 会被写进 DLL 的文件版本信息；ConfigurationManager（F1）会读它，
+         把这里填成仓库地址，插件页右上角就会出现一个 URL 按钮，点开就是本仓库。 -->
+    <Company>https://github.com/HanYuanyi/KKCharaStudioVRFix</Company>
+    <Description>KKCharaStudioVRFix - Koikatu CharaStudio 插件</Description>
+    <AssemblyTitle>KKCharaStudioVRFix</AssemblyTitle>
+    <Product>KK CharaStudio VR Fix</Product>
+    <AutoGenerateBindingRedirects>false</AutoGenerateBindingRedirects>
+    <!-- 默认编译精简版：clone 下来直接 dotnet build 即可。 -->
+    <Flavor Condition="'$(Flavor)' == ''">LEAN</Flavor>
+    <DefineConstants Condition="'$(Flavor)' == 'LEAN'">$(DefineConstants);LEAN;NEWFIX</DefineConstants>
+    <DefineConstants Condition="'$(Flavor)' == 'FULL'">$(DefineConstants);NEWFIX;DIAG</DefineConstants>
+    <NoWarn>$(NoWarn);CS0618;CS0649;CS0169</NoWarn>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- 排除备份目录 / 构建产物：SDK 式工程默认递归编译所有 .cs，
+         若源码根目录下存在 _backup_* 之类的整目录备份，会导致同一份代码被编译两遍
+         （表现为大量 CS0229 二义性 / CS0111 成员重复定义）。 -->
+    <Compile Remove="_backup/**/*.cs" />
+    <Compile Remove="_backup_*/**/*.cs" />
+    <Compile Remove="backup*/**/*.cs" />
+    <Compile Remove="bin/**/*.cs" />
+    <Compile Remove="obj/**/*.cs" />
+    <Compile Remove="_deploy/**/*.cs" />
+  </ItemGroup>
+
+  <!-- ================================================================================
+       【精简版】把 4 个诊断类的真实源码排除掉，改用 DiagnosticsStub.cs 里的空壳。
+       判定方式：编译参数里带 LEAN（如 -p:DefineConstants="LEAN%3BNEWFIX"）。
+       效果：真正的诊断代码（约 83KB 源码）完全不进 DLL，65 处调用点一行都不用改。
+       ================================================================================ -->
+  <ItemGroup Condition="$(DefineConstants.Contains('LEAN'))">
+    <Compile Remove="Diagnostics.cs" />
+    <Compile Remove="VRPointerDiagnostics.cs" />
+    <Compile Remove="JumpDiagnostics.cs" />
+    <Compile Remove="SlaveDiagnostics.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- net35 参考程序集：不需要本机安装 .NET Framework 3.5 目标包 -->
+    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies.net35" Version="1.0.3" PrivateAssets="all" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="UnityEngine">
+      <HintPath>$(GameDir)\CharaStudio_Data\Managed\UnityEngine.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="UnityEngine.UI">
+      <HintPath>$(GameDir)\CharaStudio_Data\Managed\UnityEngine.UI.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Assembly-CSharp">
+      <HintPath>$(GameDir)\CharaStudio_Data\Managed\Assembly-CSharp.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Assembly-CSharp-firstpass">
+      <HintPath>$(GameDir)\CharaStudio_Data\Managed\Assembly-CSharp-firstpass.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="VRGIN_KKCS">
+      <HintPath>$(GameDir)\BepInEx\VRGIN_KKCS.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="BepInEx">
+      <HintPath>$(GameDir)\BepInEx\core\BepInEx.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="0Harmony">
+      <HintPath>$(GameDir)\BepInEx\core\0Harmony.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+  </ItemGroup>
+
+</Project>
