@@ -1,6 +1,6 @@
 # KKCharaStudioVRFix
 
-KKCharaStudioVRPlugin_0.0.3的独立修复插件，给原版一堆BUG修复和添加新功能
+KKCharaStudioVRPlugin_0.0.3的独立修复插件，给原版的一堆BUG修复和添加本该有的功能
 
 ## 前置依赖
 
