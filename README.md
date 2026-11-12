@@ -24,14 +24,15 @@ KKCharaStudioVRPlugin_0.0.3的BUG
 - 修复进入游戏后齿轮图标的system栏里面的所有窗口看不见问题，比如画面效果菜单看不到但是又能点到(只能盲点)，和各种功能的下拉出现的菜单看不到，现在可以一直看到了。
 - 现在游戏进入后会自动解锁拖动世界，按侧键拖动。
 ## 新添加的
-- 修复画面效果无法实时更改问题，游戏启动后只能一直用默认保存的画面预设的效果，现在可以实时更改，也可以加载场景卡里面保存的画面效果了，原理：VR 相机上的效果是快照副本，改纹理类参数必须销毁重建组件。
-- 现在加载场景卡以后，镜头会自动回到场景卡保存正确的镜头的旋转和位置，上面保存的10个镜头点击后VR相机也可以去到对应正确的旋转和位置了
+- 修复画面效果无法实时更改问题，游戏启动后只能一直用默认保存的画面预设的效果，现在可以实时更改，也可以加载场景卡里面保存的画面效果了。
+- 现在加载场景卡以后，镜头会自动回到场景卡保存正确的镜头的旋转和位置，上面保存的10个镜头点击后VR相机也可以去到对应正确的旋转和位置了。
 - 修复ME窗口一拖动就瞬移到屏幕中央和ME下拉菜单看不到和ME悬浮说明框错位问题，(原UILib.MovableWindow 用真实鼠标坐标当世界坐标，VR 下必然错位。)
+- 增加按F4黑屏平面显示器隐私屏幕功能
 
 ## 未修复的
-- KKCharaStudioVRPlugin_0.0.3就有的部分地图里的镜子问题，考虑到浪费性能降低游戏帧数没有修复。
-- KKCharaStudioVRPlugin_0.0.3原版的VR第一人称功能，先按ctrl+B，再ctrl+C，ctrl+shift+X的第一人称功能，已被我魔改开发出的KK_PerspectiveX插件里面的VR第一人称功能完美替代，且功能更完善更强大体验更自由更好，所以不修复这部分，请不要按CTRL+B进入那个模式，会触发指针BUG，只能重启游戏解决。
-- 想使用VR第一人称视角(强烈建议)可以下载我魔改的KK_PerspectiveX插件，KK_PerspectiveX的VR功能说明和下载请前往github地址https://github.com/HanYuanyi/KK_PerspectiveX
+- KKCharaStudioVRPlugin_0.0.3就有的部分地图里的镜子反射问题，只有一只眼会渲染镜子，因为会造成帧率下降暂时没修复。
+- KKCharaStudioVRPlugin_0.0.3原版的VR第一人称功能，先按ctrl+B，再ctrl+C，ctrl+shift+X的第一人称功能，已被我联合开发出的KK_PerspectiveX插件里面的VR第一人称功能完美替代，且功能更完善更强大体验更自由更好，所以不修复这部分，请不要按CTRL+B进入那个模式，会触发指针BUG，只能重启游戏解决，不知道有没有什么人需要这功能，暂时没禁用。
+- 想使用VR第一人称视角(强烈建议)可以下载K_PerspectiveX插件，KK_PerspectiveX的VR功能说明和下载请前往github地址https://github.com/HanYuanyi/KK_PerspectiveX
 
 ## 兼容
 和Ermin那边的"Timeline 镜头进行了 VR 视角补正"插件https://github.com/YukyoMoe/KK_VR_CameraSync 兼容，你可以选择用我的这个插件KKCharaStudioVRFix+KK_VR_CameraSync，也可以继续使用KK_VR0.4.0+KK_VR_CameraSync。
@@ -64,28 +65,29 @@ A standalone fix plugin for KKCharaStudioVRPlugin 0.0.3 — it fixes a pile of b
 
 Bugs that came with KKCharaStudioVRPlugin 0.0.3:
 
-- Load a scene card a second time, or switch maps a few times, and the camera ends up somewhere weird, the UI and controllers vanish, IK/FK points get stuck on permanently, and the screen goes grey (the filter ends up as "none" — the morning/dusk/night one). The only way out was restarting the game. It won't trigger anymore. How it's fixed: the game keeps shoving the VR rig into the map scene, and when that scene unloads the rig gets dragged out with it, which kills the Mode. Switched it to event-driven (VRCamera.OnAwake plus the four scene-unload API prefixes) so DontDestroyOnLoad is applied before the unload happens.
-- If the controllers are started before the game, you'd end up with just the ring visible and no pointer control — or the pointer would work but snap to the top-left corner the moment you pull the trigger. Now it doesn't matter whether the controllers start first or last. How it's fixed: SteamVR_RenderModel.UpdateModel only rebuilds the model when the name changes, and when the boot timing is off it fails silently and never retries.
-- Fixed the windows inside the gear-icon System tab being invisible — e.g. the image effects menu you could click but not see (blind clicking), plus every dropdown menu. They're always visible now.
-- Dragging the world is unlocked automatically once you're in game. Drag with the side button.
+- Load a scene card a second time, or switch maps several times in a row, and the camera ends up in a strange position, the UI and controllers vanish, IK/FK points get forced to stay visible permanently, and the screen goes grey (the filter becomes "none" — the morning/dusk/night one). The only way out was restarting the game. This bug will no longer trigger. How it is fixed: the game repeatedly moves the VR rig into the map scene, and when that scene unloads the rig gets dragged out with it, causing the Mode to die. It was changed to event-driven handling (VRCamera.OnAwake plus the four scene-unload API prefixes), so DontDestroyOnLoad is applied before the unload happens.
+- If the controllers are started before the game, after entering the game only the ring/disk remains visible and VR cannot control the pointer; or the pointer works, but the moment you press the trigger the VR pointer teleports to the top-left corner. Now these bugs no longer occur whether the controllers start before or after the game. How it is fixed: SteamVR_RenderModel.UpdateModel only rebuilds the model when the name changes, and when the boot timing is wrong it fails silently and never retries.
+- Fixed the issue where all windows inside the gear-icon System tab are invisible after entering the game — for example, the image effects menu cannot be seen but can still be clicked (blind clicking), and the dropdown menus that appear for various functions cannot be seen. Now they are always visible.
+- Dragging the world is now automatically unlocked after entering the game. Drag with the side button.
 
 ## What it adds
 
-- Image effects can be changed in real time now. Before, you were stuck with whatever preset was saved at launch; now you can change it live and even load the effects saved inside a scene card. Why it needed fixing: the effects on the VR camera are snapshot copies, so changing texture-type parameters means destroying and rebuilding the component.
-- After loading a scene card, the camera returns to the exact rotation and position saved in that card. The 10 camera slots saved in it work too — click one and the VR camera goes to the right spot.
-- Fixed the ME window teleporting to the middle of the screen the moment you drag it, the ME dropdown menus being invisible, and the ME tooltip being out of place. (The original UILib.MovableWindow treats real mouse coordinates as world coordinates, which is guaranteed to be off in VR.)
+- Fixed the issue where image effects could not be changed in real time. After the game starts, you could only keep using the effects of the default saved image preset; now they can be changed in real time, and you can also load the image effects saved inside a scene card.
+- After loading a scene card, the camera now automatically returns to the correct camera rotation and position saved in the scene card. After clicking one of the 10 camera slots saved in it, the VR camera can also go to the corresponding correct rotation and position.
+- Fixed the ME window teleporting to the center of the screen as soon as it is dragged, the ME dropdown menus being invisible, and the ME hover tooltip being misaligned. (The original UILib.MovableWindow uses real mouse coordinates as world coordinates, which is guaranteed to be misaligned in VR.)
+- Added an F4 privacy-screen feature that blacks out the flat monitor.
 
 ## Not fixed
 
-- The mirror issue in some maps was already there in 0.0.3. I left it alone because fixing it costs performance and drops your framerate.
-- The original 0.0.3 first-person mode (Ctrl+B, then Ctrl+C, then Ctrl+Shift+X) is not fixed. My own modded KK_PerspectiveX has a first-person mode that replaces it completely — better features, more freedom, just a nicer experience. So I'm not touching this one. Please don't press Ctrl+B to get into that mode; it triggers the pointer bug and you'll have to restart the game.
-- If you want first-person VR (and I'd strongly recommend it), grab my modded KK_PerspectiveX. Docs and download are on GitHub: https://github.com/HanYuanyi/KK_PerspectiveX
+- The mirror reflection issue in some maps that was already present in KKCharaStudioVRPlugin 0.0.3 has not been fixed. Only one eye renders the mirror, and it has not been fixed for now because it would cause a framerate drop.
+- The original VR first-person mode in KKCharaStudioVRPlugin 0.0.3 (press Ctrl+B, then Ctrl+C, then Ctrl+Shift+X) has been perfectly replaced by the VR first-person feature in the KK_PerspectiveX plugin that I co-developed, which has more complete and powerful features and a freer, better experience, so I am not fixing this part. Please do not press Ctrl+B to enter that mode; it triggers the pointer bug, and the only way to solve it is to restart the game. I don't know if anyone needs this feature, so I haven't disabled it for now.
+- If you want to use the VR first-person view (strongly recommended), you can download the K_PerspectiveX plugin. For the VR feature documentation and download of KK_PerspectiveX, go to GitHub: https://github.com/HanYuanyi/KK_PerspectiveX
 
 ## Compatibility
 
-Works alongside Ermin's "Timeline camera VR correction" plugin https://github.com/YukyoMoe/KK_VR_CameraSync — you can either run my KKCharaStudioVRFix + KK_VR_CameraSync, or keep using KK_VR 0.4.0 + KK_VR_CameraSync.
+Works with Ermin's "Timeline camera VR correction" plugin https://github.com/YukyoMoe/KK_VR_CameraSync — you can either use my KKCharaStudioVRFix + KK_VR_CameraSync, or continue using KK_VR 0.4.0 + KK_VR_CameraSync.
 
-Compatibility with Ermin's KK_VR 0.4.0 is unknown. KK_VR 0.4.0 gets around these bugs through the wrist menu, but I never tested exactly how it does that. This plugin also needs KKCharaStudioVRPlugin 0.0.3, so most likely they can't run together.
+Compatibility with Ermin's KK_VR 0.4.0 is unknown, because KK_VR 0.4.0 bypasses the above bugs through its wrist-menu feature, but I have not tested exactly what it bypasses or how. However, this plugin requires KKCharaStudioVRPlugin 0.0.3, so there is a high probability they cannot be used together.
 
 ## License
 
