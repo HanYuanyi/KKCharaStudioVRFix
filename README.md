@@ -53,7 +53,7 @@ A standalone fix plugin for KKCharaStudioVRPlugin 0.0.3 — it fixes a pile of b
 |---|---|
 | Koikatu / Koikatsu Party (with CharaStudio) | base game |
 | BepInEx | 5.4.x (64-bit) |
-| KKCharaStudioVRPlugin | 0.0.3 (this plugin fixes its bugs) |
+| KKCharaStudioVRPlugin | 0.0.3 (fixes its bugs) |
 
 ## Install
 
@@ -65,7 +65,7 @@ A standalone fix plugin for KKCharaStudioVRPlugin 0.0.3 — it fixes a pile of b
 
 Bugs that came with KKCharaStudioVRPlugin 0.0.3:
 
-- Load a scene card a second time, or switch maps several times in a row, and the camera ends up in a strange position, the UI and controllers vanish, IK/FK points get forced to stay visible permanently, and the screen goes grey (the filter becomes "none" — the morning/dusk/night one). The only way out was restarting the game. This bug will no longer trigger. How it is fixed: the game repeatedly moves the VR rig into the map scene, and when that scene unloads the rig gets dragged out with it, causing the Mode to die. It was changed to event-driven handling (VRCamera.OnAwake plus the four scene-unload API prefixes), so DontDestroyOnLoad is applied before the unload happens.
+- Load a scene card a second time, or switch maps several times in a row, and the camera ends up in a weird position, the UI and controllers vanish, IK/FK points get forced to stay visible permanently, and the screen goes grey (the filter becomes "none" — the morning/dusk/night one). The only way out was restarting the game. This bug will no longer trigger. How it is fixed: the game repeatedly moves the VR rig into the map scene, and when that scene unloads the rig gets dragged out with it, causing the Mode to die. It was changed to event-driven handling (VRCamera.OnAwake plus the four scene-unload API prefixes), so DontDestroyOnLoad is applied before the unload happens.
 - If the controllers are started before the game, after entering the game only the ring/disk remains visible and VR cannot control the pointer; or the pointer works, but the moment you press the trigger the VR pointer teleports to the top-left corner. Now these bugs no longer occur whether the controllers start before or after the game. How it is fixed: SteamVR_RenderModel.UpdateModel only rebuilds the model when the name changes, and when the boot timing is wrong it fails silently and never retries.
 - Fixed the issue where all windows inside the gear-icon System tab are invisible after entering the game — for example, the image effects menu cannot be seen but can still be clicked (blind clicking), and the dropdown menus that appear for various functions cannot be seen. Now they are always visible.
 - Dragging the world is now automatically unlocked after entering the game. Drag with the side button.
@@ -74,20 +74,20 @@ Bugs that came with KKCharaStudioVRPlugin 0.0.3:
 
 - Fixed the issue where image effects could not be changed in real time. After the game starts, you could only keep using the effects of the default saved image preset; now they can be changed in real time, and you can also load the image effects saved inside a scene card.
 - After loading a scene card, the camera now automatically returns to the correct camera rotation and position saved in the scene card. After clicking one of the 10 camera slots saved in it, the VR camera can also go to the corresponding correct rotation and position.
-- Fixed the ME window teleporting to the center of the screen as soon as it is dragged, the ME dropdown menus being invisible, and the ME hover tooltip being misaligned. (The original UILib.MovableWindow uses real mouse coordinates as world coordinates, which is guaranteed to be misaligned in VR.)
+- Fixed the ME window teleporting to the center of the screen as soon as it is dragged, the ME dropdown menus being invisible, and the ME hover tooltip being misaligned.
 - Added an F4 privacy-screen feature that blacks out the flat monitor.
 
 ## Not fixed
 
 - The mirror reflection issue in some maps that was already present in KKCharaStudioVRPlugin 0.0.3 has not been fixed. Only one eye renders the mirror, and it has not been fixed for now because it would cause a framerate drop.
-- The original VR first-person mode in KKCharaStudioVRPlugin 0.0.3 (press Ctrl+B, then Ctrl+C, then Ctrl+Shift+X) has been perfectly replaced by the VR first-person feature in the KK_PerspectiveX plugin that I co-developed, which has more complete and powerful features and a freer, better experience, so I am not fixing this part. Please do not press Ctrl+B to enter that mode; it triggers the pointer bug, and the only way to solve it is to restart the game. I don't know if anyone needs this feature, so I haven't disabled it for now.
-- If you want to use the VR first-person view (strongly recommended), you can download the K_PerspectiveX plugin. For the VR feature documentation and download of KK_PerspectiveX, go to GitHub: https://github.com/HanYuanyi/KK_PerspectiveX
+- The original VR first-person mode in KKCharaStudioVRPlugin 0.0.3 (press Ctrl+B, then Ctrl+C, then Ctrl+Shift+X) has been perfectly replaced by the VR first-person feature in the KK_PerspectiveX plugin that I developed, which has more complete and powerful features and a freer, better experience, so I am not fixing this part. Please do not press Ctrl+B to enter that mode; it triggers the pointer bug, and the only way to solve it is to restart the game. I don't know if anyone needs this feature, so I haven't disabled it for now.
+- If you want to use the VR first-person view (strongly recommended), you can download the K_PerspectiveX plugin. To download KK_PerspectiveX, go to GitHub: https://github.com/HanYuanyi/KK_PerspectiveX
 
 ## Compatibility
 
 Works with Ermin's "Timeline camera VR correction" plugin https://github.com/YukyoMoe/KK_VR_CameraSync — you can either use my KKCharaStudioVRFix + KK_VR_CameraSync, or continue using KK_VR 0.4.0 + KK_VR_CameraSync.
 
-Compatibility with Ermin's KK_VR 0.4.0 is unknown, because KK_VR 0.4.0 bypasses the above bugs through its wrist-menu feature, but I have not tested exactly what it bypasses or how. However, this plugin requires KKCharaStudioVRPlugin 0.0.3, so there is a high probability they cannot be used together.
+Compatibility with Ermin's KK_VR 0.4.0 is unknown, because KK_VR 0.4.0 bypasses the above bugs through its wrist-menu feature, but I have not tested exactly what it bypasses or how. However, this plugin requires KKCharaStudioVRPlugin 0.0.3, so most likely they cannot be used together.
 
 ## License
 
