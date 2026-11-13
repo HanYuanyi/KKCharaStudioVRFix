@@ -32,11 +32,11 @@ KKCharaStudioVRPlugin_0.0.3的BUG
 ## 未修复的
 - KKCharaStudioVRPlugin_0.0.3就有的部分地图里的镜子反射问题，只有一只眼会渲染镜子，因为会造成帧率下降暂时没修复。
 - KKCharaStudioVRPlugin_0.0.3原版的VR第一人称功能，先按ctrl+B，再ctrl+C，ctrl+shift+X的第一人称功能，已被我开发出的KK_PerspectiveX插件里面的VR第一人称功能完美替代，且功能更完善更强大体验更自由更好，所以不修复这部分，请不要按CTRL+B进入那个模式，会触发指针BUG，只能重启游戏解决，不知道有没有什么人需要这功能，暂时没禁用。
-- 想使用VR第一人称视角(强烈建议)可以下载K_PerspectiveX插件，KK_PerspectiveX下载请前往或github地址https://github.com/HanYuanyi/KK_PerspectiveX
 
 ## 兼容
 和Ermin那边的"Timeline 镜头进行了 VR 视角补正"插件https://github.com/YukyoMoe/KK_VR_CameraSync 兼容，你可以选择用我的这个插件KKCharaStudioVRFix+KK_VR_CameraSync，也可以继续使用KK_VR0.4.0+KK_VR_CameraSync。
 这个插件和Ermin开发的KK_VR0.4.0兼容性未知，因为KK_VR0.4.0是通过手腕菜单功能绕过了上面的这些BUG，但绕的什么情况我没测试过，不过本插件需要有KKCharaStudioVRPlugin0.0.3，大概率无法一起使用。
+想使用VR第一人称视角(强烈建议)可以下载K_PerspectiveX插件，KK_PerspectiveX下载请前往github地址https://github.com/HanYuanyi/KK_PerspectiveX
 
 ## 许可
 MIT，见 LICENSE。
