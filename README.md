@@ -8,7 +8,7 @@ KKCharaStudioVRPlugin_0.0.3的独立修复插件，给原版的一堆BUG修复�
 |---|---|
 | Koikatu / Koikatsu Party（含 CharaStudio） | 本体 |
 | BepInEx | 5.4.x（64 位） |
-| KKCharaStudioVRPlugin | 0.0.3（插件是修它的BUG） |
+| KKCharaStudioVRPlugin | 0.0.3（修这个的BUG） |
 
 ## 安装
 
